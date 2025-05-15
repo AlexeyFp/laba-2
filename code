@@ -1,5 +1,4 @@
 import re
-import numpy as np
 
 def read_file(file_path):
     with open(file_path, 'r') as file:
@@ -18,7 +17,6 @@ def number_to_words(number):
 def main():
     K = int(input("Введите минимальное количество цифр K: "))
     max_decimal_value = 2048
-    threshold_sum = 12
     
     content = read_file("data.txt")
     
