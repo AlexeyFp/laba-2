@@ -1,45 +1,28 @@
 import re
 
-def read_file(file_path):
-    with open(file_path, 'r') as file:
-        return file.read()
-
-def hex_to_decimal(hex_str):
-    return int(hex_str, 16)
-
-def number_to_words(number):
-    num_dict = {
-        0: "ноль", 1: "один", 2: "два", 3: "три", 4: "четыре",
-        5: "пять", 6: "шесть", 7: "семь", 8: "восемь", 9: "девять"
+def hex_even_numbers(file_path):
+    # Словарь для преобразования четных цифр в слова
+    even_digits = {
+        '0': 'ноль',
+        '2': 'два',
+        '4': 'четыре',
+        '6': 'шесть',
+        '8': 'восемь',
     }
-    return ' '.join(num_dict[int(digit)] for digit in str(number))
-
-def main():
-    K = int(input("Введите минимальное количество цифр K: "))
-    max_decimal_value = 2048
     
-    content = read_file("data.txt")
+    # Регулярное выражение для поиска шестнадцатеричных чисел
+    hex_pattern = r'\b[13579][0-9A-F]*[02468]\b'
     
-    hex_pattern = re.compile(r'\b[0-9a-fA-F]+\b')
-    hex_numbers = re.findall(hex_pattern, content)
-    
-    filtered_numbers = []
-    
-    for hex_num in hex_numbers:
-        decimal_value = hex_to_decimal(hex_num)
-        if (decimal_value <= max_decimal_value and 
-            decimal_value % 2 == 0 and 
-            len(hex_num) > K):
-            filtered_numbers.append((hex_num, decimal_value))
-    
-    filtered_numbers.sort(key=lambda x: x[1])
-    
-    print("Подходящие числа:")
-    for hex_num, dec_num in filtered_numbers:
-        print(hex_num)
-
-    print(f"Количество таких чисел: {len(filtered_numbers)}")
-
-    if filtered_numbers:
-        max_number = filtered_numbers[-1][1]
-        print(f"Максимальное число прописью: {number_to_words(max_number)}")
+    with open(file_path, 'r') as file:
+        content = file.read()
+        
+        # Находим все подходящие шестнадцатеричные числа
+        matches = re.findall(hex_pattern, content, re.IGNORECASE)
+        
+        # Преобразуем четные цифры в слова
+        result = []
+        for match in matches:
+            converted = ''.join(even_digits.get(char, char) for char in match)
+            result.append(converted)
+        
+        return result
