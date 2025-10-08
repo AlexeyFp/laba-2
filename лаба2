@@ -9,15 +9,11 @@
 import re
 
 def hex_even_numbers(file_path):
-    # Словарь для преобразования четных цифр в слова
     even_digits = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'десять', 'C': 'двенадцать', 'E': 'четырнадцать'}
-    # Регулярное выражение для поиска шестнадцатеричных чисел
     hex_pattern = r'\b[13579][0-9A-F]*[02468]\b'
     with open(file_path, 'r') as file:
         content = file.read()
-        # Находим все подходящие шестнадцатеричные числа
         matches = re.findall(hex_pattern, content, re.IGNORECASE)
-        # Преобразуем четные цифры в слова
         result = []
         for match in matches:
             converted = ''.join(even_digits.get(char, char) for char in match)
