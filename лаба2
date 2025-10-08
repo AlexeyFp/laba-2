@@ -16,6 +16,6 @@ def hex_even_numbers(file_path):
         matches = re.findall(hex_pattern, content, re.IGNORECASE)
         result = []
         for match in matches:
-            converted = ''.join(even_digits.get(char, char) for char in match)
+            converted = ' '.join(even_digits.get(char, char) for char in match)
             result.append(converted)
         return result
