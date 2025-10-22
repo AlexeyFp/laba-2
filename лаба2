@@ -10,11 +10,11 @@ import re
 digit_map = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'десять', 'C': 'двенадцать', 'E': 'четырнадцать'}
 K = 1024
 start_digits = {'1', '3', '5', '7', '9', 'B', 'D', 'F'}
-with open('input.txt', 'r') as f:
+with open('hex_numbers.txt', 'r') as f:
     content = f.read()
     hex_numbers = re.findall(r'\b[13579BDF][0-9A-F]*\b', content)
     for hex_num in hex_numbers:
-        num = int(upper_word, 16)
+        num = int(hex_num, 16)
         if num <= K and num % 2 == 0:
             res = ' '.join(digit_map.get(c.upper(), c) for c in hex_num)
             print(res)
