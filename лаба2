@@ -17,7 +17,6 @@ def process_file(file_path):
         valid_tokens = [token for token in content.split()
             if re.fullmatch(r'[0-9A-Fa-f]+', token) and is_valid_hex_number(token)]
         for token in valid_tokens:
-            # Преобразование четных цифр в слова с использованием join и генератора
-            transformed = ' '.join(digit_map.get(char, char) for char in token)
-            print(transformed)
+            t = ' '.join(digit_map.get(char, char) for char in token)
+            print(t)
 process_file('hex_numbers.txt')
