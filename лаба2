@@ -9,14 +9,10 @@
 import re
 
 digit_map = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'десять', 'C': 'двенадцать', 'E': 'четырнадцать'}
-def is_valid_hex_number(hex_number):
-    return hex_number[0] in "13579BDF"
-def process_file(file_path):
-    with open(file_path, 'r') as file:
-        content = file.read()
-        valid_tokens = [token for token in content.split()
-            if re.fullmatch(r'[0-9A-Fa-f]+', token) and is_valid_hex_number(token)]
-        for token in valid_tokens:
-            t = ' '.join(digit_map.get(char, char) for char in token)
-            print(t)
-process_file('hex_numbers.txt')
+with open('hex_numbers.txt', 'r') as file:
+    content = file.read()
+    valid_tokens = [token for token in content.split()
+        if re.fullmatch(r'[0-9A-F]+', token) and token[0] in "13579BDF"]
+    for token in valid_tokens:
+        res = ' '.join(digit_map.get(char, char) for char in token)
+        print(res)
