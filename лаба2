@@ -9,10 +9,13 @@
 import re
 
 digit_map = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'десять', 'C': 'двенадцать', 'E': 'четырнадцать'}
+K = 1024
 with open('hex_numbers.txt', 'r') as file:
     content = file.read()
     valid_tokens = [token for token in content.split()
         if re.fullmatch(r'[0-9A-F]+', token) and token[0] in "13579BDF"]
     for token in valid_tokens:
-        res = ' '.join(digit_map.get(char, char) for char in token)
-        print(res)
+        decimal_value = int(token, 16)
+        if decimal_value <= K:
+            res = ' '.join(digit_map.get(char, char) for char in token)
+            print(res)
