@@ -9,13 +9,32 @@
 import re
 
 digit_map = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'десять', 'C': 'двенадцать', 'E': 'четырнадцать'}
-K = 1024
-with open('hex_numbers.txt', 'r') as file:
-    content = file.read()
-    valid_tokens = [token for token in content.split()
-        if re.fullmatch(r'[0-9A-F]+', token) and token[0] in "13579BDF"]
-    for token in valid_tokens:
-        decimal_value = int(token, 16)
-        if decimal_value <= K:
-            res = ' '.join(digit_map.get(char, char) for char in token)
-            print(res)
+start_digits = set('13579BDF')
+LIMIT = 1024  
+
+lexeme_pattern = re.compile(r'\b[0-9A-Fa-f]+\b')
+
+def is_suitable(lex: str) -> bool:
+    up = lex.upper()
+    if up[0] not in start_digits:
+        return False
+    if up[-1] not in '02468ACE':
+        return False
+    try:
+        val = int(up, 16)
+    except ValueError:
+        return False
+    return val <= LIMIT
+
+def transform(lex: str) -> str:
+    return ''.join(digit_map.get(c.upper(), c) for c in lex.upper())
+
+def main(input_path: str = 'input.txt', limit: int = LIMIT):
+    with open(input_path, 'r', encoding='utf-8') as f:
+        data = f.read()
+    for lex in lexeme_pattern.findall(data):
+        if is_suitable(lex):
+            print(transform(lex))
+
+if __name__ == "__main__":
+    main()
