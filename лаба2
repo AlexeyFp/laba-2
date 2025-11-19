@@ -8,33 +8,17 @@
 
 import re
 
-digit_map = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'десять', 'C': 'двенадцать', 'E': 'четырнадцать'}
-start_digits = set('13579BDF')
-LIMIT = 1024  
+def hex_numb(hex_str):
+    return bool(re.fullmatch(r'[13579BDF][0-9A-F]*[02468ACE]', hex_str, re.I)) and int(hex_str, 16) <= 0x3FF
 
-lexeme_pattern = re.compile(r'\b[0-9A-Fa-f]+\b')
-
-def is_suitable(lex: str) -> bool:
-    up = lex.upper()
-    if up[0] not in start_digits:
-        return False
-    if up[-1] not in '02468ACE':
-        return False
+def process_file(filename):
+    words = {'0': "ноль", '2': "два", '4': "четыре", '6': "шесть", '8': "восемь", 'A': "десять", 'C': "двенадцать", 'E': "четырнадцать"}
     try:
-        val = int(up, 16)
-    except ValueError:
-        return False
-    return val <= LIMIT
+        with open(filename) as file:
+            for word in file.read().split():
+                if hex_numb(word):
+                    print(word, ' '.join(words.get(ch.upper(), ch) for ch in word))
+    except FileNotFoundError:
+        print(f"Файл '{filename}' не найден!")
 
-def transform(lex: str) -> str:
-    return ''.join(digit_map.get(c.upper(), c) for c in lex.upper())
-
-def main(input_path: str = 'input.txt', limit: int = LIMIT):
-    with open(input_path, 'r', encoding='utf-8') as f:
-        data = f.read()
-    for lex in lexeme_pattern.findall(data):
-        if is_suitable(lex):
-            print(transform(lex))
-
-if __name__ == "__main__":
-    main()
+process_file("hex_numbers.txt")
